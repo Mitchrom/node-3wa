@@ -1,11 +1,10 @@
-const http = require("http"),
-  fs = require("fs"),
-  date = require("dayjs");
-
+const dayjs = require("dayjs");
+const http = require("http");
+const fs = require("fs");
 require("dotenv").config();
 // console.log(process.env)
-const HOST = process.env.APP_LOCALHOST || "127.0.0.1",
-  PORT = process.env.APP_PORT || 8000;
+const HOST = process.env.APP_LOCALHOST,
+  PORT = process.env.APP_PORT;
 
 let students = [
   { name: "Sonia", birth: "2019-14-05" },
@@ -34,7 +33,9 @@ http
                 <li class="infos-container">
                 <div>
                   <p>nom: ${name}</p>
-                  <p>anniversaire: ${birth}</p>    
+                  <p>anniversaire: ${dayjs(birth)
+                    .locale("fr")
+                    .format("D MMMM YYYY")}</p>    
                 </div>
                 <p class="delete">[X]</p>
                 </li>
