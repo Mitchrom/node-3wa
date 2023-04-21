@@ -1,4 +1,33 @@
+body,
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  margin-top: 50px;
+}
+
 .form-users {
   display: flex;
   flex-direction: column;
+}
+.form-users input,
+.form-users button {
+  max-width: 200px;
+  margin-top: 15px;
+}
+
+.infos-container {
+  /* border: 1px solid; */
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.delete {
+  margin-left: 10px;
 }

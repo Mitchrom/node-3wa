@@ -1,7 +1,11 @@
 const http = require("http"),
-  fs = require("fs");
+  fs = require("fs"),
+  date = require("dayjs");
+
 require("dotenv").config();
 // console.log(process.env)
+const HOST = process.env.APP_LOCALHOST || "127.0.0.1",
+  PORT = process.env.APP_PORT || 8000;
 
 let students = [
   { name: "Sonia", birth: "2019-14-05" },
@@ -10,9 +14,6 @@ let students = [
   { name: "Sophie", birth: "2001-10-02" },
   { name: "Bernard", birth: "1980-21-08" },
 ];
-
-const HOST = process.env.APP_LOCALHOST || "127.0.0.1",
-  PORT = process.env.APP_PORT || 8000;
 
 http
   .createServer((req, res) => {
@@ -30,9 +31,12 @@ http
       let html = `<ul>`;
       for ({ name, birth } of students) {
         let infos = `
-                <li>
-                    <p>nom: ${name}</p>
-                    <p>anniversaire: ${birth}</p>
+                <li class="infos-container">
+                <div>
+                  <p>nom: ${name}</p>
+                  <p>anniversaire: ${birth}</p>    
+                </div>
+                <p class="delete">[X]</p>
                 </li>
             `;
         html += infos;
@@ -41,6 +45,9 @@ http
       res.writeHead(200, { "Content-Type": "text/html" });
       res.end(`
             <html>
+                <head>
+                  <link rel="stylesheet" href="/assets/css/style.css">
+                </head>
                 <body>
                     ${html}
                     <a href="/">Retour</a>
@@ -70,7 +77,7 @@ http
           else infos = { ...infos, birth: ele };
         });
         students = [...students, infos];
-        console.log(infos);
+        // console.log(infos);
       });
     }
   })
