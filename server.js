@@ -3,7 +3,7 @@ const http = require("http"),
 require("dotenv").config();
 // console.log(process.env)
 
-const students = [
+let students = [
   { name: "Sonia", birth: "2019-14-05" },
   { name: "Antoine", birth: "2000-12-05" },
   { name: "Alice", birth: "1990-14-09" },
@@ -16,9 +16,9 @@ const HOST = process.env.APP_LOCALHOST || "127.0.0.1",
 
 http
   .createServer((req, res) => {
-    const { url } = req;
-    if (url === "/assets/css.css") {
-      const cssFile = fs.readFileSync("assets/css.css", "utf8");
+    const { url, method } = req;
+    if (url === "/assets/css/style.css") {
+      const cssFile = fs.readFileSync("assets/css/style.css", "utf8");
       res.writeHead(200, { "Content-Type": "text/css" });
       res.write(cssFile);
       res.end();
@@ -50,6 +50,28 @@ http
     } else {
       res.writeHead(400, { "Content-Type": "text/html" });
       res.end(`URL invalide`);
+    }
+    if (method === "POST") {
+      let test;
+      req.on("data", (data) => {
+        console.log("on: ", data);
+        test = data;
+      });
+
+      req.on("end", () => {
+        let infos = {};
+        console.log("end: ", test);
+        const replacer = new RegExp(/\+/, "g");
+        console.log(replacer);
+
+        const name = test.toString().split(/=/).pop().replace(replacer, " ");
+        name.split(" ").map((ele, i) => {
+          if (i === 0) infos = { ...infos, name: ele };
+          else infos = { ...infos, birth: ele };
+        });
+        students = [...students, infos];
+        console.log(infos);
+      });
     }
   })
   // .listen(PORT);
